@@ -97,6 +97,7 @@ class YoutubeDownloader():
 
             i = 1
             d = 0
+            video_title = ''
             if option == 1:
                 for video in playlist.videos:
                     
@@ -105,7 +106,9 @@ class YoutubeDownloader():
                         continue
                     
                     try:
-                        print("Downloading {}".format(video.title))
+                        video_title = video.title
+
+                        print("Downloading {}".format(video_title))
                         v = video.streams.get_by_resolution(quality)
 
                         if v is None:
@@ -115,7 +118,7 @@ class YoutubeDownloader():
 
                         d+=1
                     except:
-                        print(f'Download faield for {video.title}')
+                        print(f'Download faield for {video_title}')
                         continue
             
             elif option == 0:
@@ -126,11 +129,12 @@ class YoutubeDownloader():
                         continue
                     
                     try:
-                        print("Downloading {}".format(video.title))
+                        video_title = video.title
+                        print("Downloading {}".format(video_title))
                         video.streams.get_audio_only().download(dest)
                         d+=1
                     except:
-                        print(f'Download failed for {video.title}')
+                        print(f'Download failed for {video_title}')
                         continue
 
             print(f"Downloaded {d} of {playlist_length}")
@@ -148,24 +152,25 @@ class YoutubeDownloader():
             video = YouTube(link)
             print("Downloading",video.title)
             
+            video_title = video.title
             if option == 1:
                 try:
                     video.streams.get_by_resolution(quality).download(dest)
                 except:
-                    print(f'Download failed for {video.title}')
+                    print(f'Download failed for {video_title}')
                     continue
 
             elif option == 0:
                 try:
                     video.streams.get_audio_only().download(dest)
                 except:
-                    print(f'Download failed for {video.title}')
+                    print(f'Download failed for {video_title}')
                     continue
 
             print("Downloaded!")
             print('===============')
 
-    def notify():
+    def notify(self):
         if platform.system() == 'Windows':
             import winsound
             winsound.MessageBeep()

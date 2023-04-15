@@ -1,8 +1,3 @@
-# Python-Youtube-Downloader
-
-This is a command-line program that allows you to download videos or playlists from YouTube using pytube library.
-
-
 ## How to use
 
 1. Run the program using the following command: 

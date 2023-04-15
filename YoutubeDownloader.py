@@ -180,6 +180,10 @@ class YoutubeDownloader():
         if platform.system() == 'Windows':
             import winsound
             winsound.MessageBeep()
+        elif platform.system() == 'darwin':
+            os.system('osascript -e "beep"')
+        elif platform.startswith('linux'):
+            os.system('beep')
     
     def main(self):
     

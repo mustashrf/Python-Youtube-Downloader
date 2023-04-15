@@ -12,6 +12,8 @@ class YoutubeDownloader():
 
             self.upgradePackage()
 
+            self.failures = []
+
             self.main()
             
         else:
@@ -119,6 +121,7 @@ class YoutubeDownloader():
                         d+=1
                     except:
                         print(f'Download faield for {video_title}')
+                        self.failures.append(video_title)
                         continue
             
             elif option == 0:
@@ -135,6 +138,7 @@ class YoutubeDownloader():
                         d+=1
                     except:
                         print(f'Download failed for {video_title}')
+                        self.failures.append(video_title)
                         continue
 
             print(f"Downloaded {d} of {playlist_length}")
@@ -158,6 +162,7 @@ class YoutubeDownloader():
                     video.streams.get_by_resolution(quality).download(dest)
                 except:
                     print(f'Download failed for {video_title}')
+                    self.failures.append(video_title)
                     continue
 
             elif option == 0:
@@ -165,6 +170,7 @@ class YoutubeDownloader():
                     video.streams.get_audio_only().download(dest)
                 except:
                     print(f'Download failed for {video_title}')
+                    self.failures.append(video_title)
                     continue
 
             print("Downloaded!")
@@ -218,6 +224,16 @@ class YoutubeDownloader():
                         inputs.append(self.getInput())
                     
                     self.downloadSingleVideo(inputs)
+
+            # print failures
+            failure_count = len(self.failures)
+            print(f'({failure_count}) failures')
+            if failure_count > 0:
+                for failure in self.failures:
+                    print(failure)
+            print()
+
+            self.failures.clear()
 
             self.notify()
 

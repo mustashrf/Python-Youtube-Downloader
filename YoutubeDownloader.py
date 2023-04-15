@@ -120,14 +120,7 @@ class YoutubeDownloader():
 
                         d+=1
                     except:
-                        print(f'Download faield for {video_title}')
-                        self.failures.append(video_title)
-                        continue
-            
-            elif option == 0:
-                for video in playlist.videos:
-                    
-                    if i in exception:
+                        print(f'Download failed for {video_title}')
                         i += 1
                         continue
                     

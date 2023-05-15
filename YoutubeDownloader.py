@@ -100,30 +100,31 @@ class YoutubeDownloader():
             i = 1
             d = 0
             video_title = ''
+
             if option == 1:
                 for video in playlist.videos:
-                    
                     if i in exception:
                         i += 1
                         continue
-                    
                     try:
                         video_title = video.title
-
                         print("Downloading {}".format(video_title))
                         v = video.streams.get_by_resolution(quality)
-
                         if v is None:
                             v = video.streams.get_highest_resolution()
-                        
                         v.download(dest)
-
                         d+=1
                     except:
                         print(f'Download failed for {video_title}')
                         i += 1
+                        self.failures.append(video_title)
                         continue
-                    
+
+            elif option == 0:
+                for video in playlist.videos:
+                    if i in exception:
+                        i += 1
+                        continue
                     try:
                         video_title = video.title
                         print("Downloading {}".format(video_title))
@@ -131,6 +132,7 @@ class YoutubeDownloader():
                         d+=1
                     except:
                         print(f'Download failed for {video_title}')
+                        i += 1
                         self.failures.append(video_title)
                         continue
 

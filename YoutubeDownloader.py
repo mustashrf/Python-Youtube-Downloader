@@ -10,16 +10,16 @@ class YoutubeDownloader():
         
         if self.checkConnection():
 
-            self.upgradePackage()
-
             self.failures = []
 
             self.main()
-            
+
+            self.upgradePackage()
+
         else:
             print('Waiting for connection...')
             
-            for i in range(20):
+            for _ in range(20):
                 
                 if self.checkConnection():
                     
@@ -30,7 +30,7 @@ class YoutubeDownloader():
                 sleep(3)
     
     def get_file_instructions(self, file_path):
-        with open("test.txt", "r") as file:
+        with open(file_path, "r") as file:
             lines = file.readlines()
 
             instructions = []
@@ -97,44 +97,40 @@ class YoutubeDownloader():
             playlist_length = len(playlist.video_urls)-(len(exception))
             print(f"{playlist_length} video(s)")
 
-            i = 1
+            i = 0
             d = 0
             video_title = ''
 
             if option == 1:
                 for video in playlist.videos:
+                    i += 1
                     if i in exception:
-                        i += 1
                         continue
                     try:
                         video_title = video.title
-                        print("Downloading {}".format(video_title))
+                        print(f"Downloading {video_title}")
                         v = video.streams.get_by_resolution(quality)
                         if v is None:
                             v = video.streams.get_highest_resolution()
-                        v.download(dest)
+                        v.download(output_path=dest, filename=f'{d+1}.{video_title}.mp4')
                         d+=1
                     except:
                         print(f'Download failed for {video_title}')
-                        i += 1
                         self.failures.append(video_title)
-                        continue
 
             elif option == 0:
                 for video in playlist.videos:
+                    i += 1
                     if i in exception:
-                        i += 1
                         continue
                     try:
                         video_title = video.title
-                        print("Downloading {}".format(video_title))
-                        video.streams.get_audio_only().download(dest)
+                        print(f"Downloading {video_title}")
+                        video.streams.get_audio_only().download(output_path=dest, filename=f'{d+1}.{video_title}.mp4')
                         d+=1
                     except:
                         print(f'Download failed for {video_title}')
-                        i += 1
                         self.failures.append(video_title)
-                        continue
 
             print(f"Downloaded {d} of {playlist_length}")
             print('===============')
@@ -226,7 +222,7 @@ class YoutubeDownloader():
 
             # print failures
             failure_count = len(self.failures)
-            print(f'({failure_count}) failures')
+            print(f'{failure_count} failure(s)')
             if failure_count > 0:
                 for failure in self.failures:
                     print(failure)
